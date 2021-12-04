@@ -16,15 +16,7 @@ export function playBingo() {
     const bingoInput = lines[0].split(",").map(text => Number(text));
     const bingoBoards = parseBoards(lines.slice(1));
 
-    for (const draw of bingoInput) {
-        for (const board of bingoBoards) {
-            if (applyBingoMarkAndCheckVictory(draw, board)) {
-                return console.log("winner", board, 'score', sumOfUnmarkedNumbers(board) * draw);
-            }
-        }
-    }
-
-    console.log("no winners");
+    partOne(bingoInput, bingoBoards);
 }
 
 function parseBoards(lines: string[]): BingoBoard[] {
@@ -40,6 +32,16 @@ function parseBoards(lines: string[]): BingoBoard[] {
         boards.push(board);
     }
     return boards;
+}
+
+function partOne(bingoInput: number[], bingoBoards: BingoBoard[]) {
+    for (const draw of bingoInput) {
+        for (const board of bingoBoards) {
+            if (applyBingoMarkAndCheckVictory(draw, board)) {
+                return console.log('draw', draw, 'score', sumOfUnmarkedNumbers(board) * draw);
+            }
+        }
+    }
 }
 
 function applyBingoMarkAndCheckVictory(draw: number, board: BingoBoard): boolean {
