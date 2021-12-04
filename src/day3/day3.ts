@@ -1,19 +1,19 @@
-import { readFromFileByLine } from "../utils";
 import path from "path";
+import {readFileSync} from "fs";
 
 export function dayThree() {
-    const lines = readFromFileByLine(path.resolve(__dirname, './input.txt'));
+    const lines = readFileSync(path.resolve(__dirname, './input.txt'), 'utf-8').split('\r\n');
     const bitLength = lines[1].length;
     const sumOfOnesList = new Array(lines[1].length).fill(0);
-    for (const line of lines){
+    for (const line of lines) {
         for (let i = 0; i < bitLength; i++) {
             if (line[i] === "1") sumOfOnesList[i]++;
         }
     }
     let gamma = 0; // most common bits belong to me
     let epsilon = 0;
-    for (let i = 0; i < bitLength ; i++) {
-        if (sumOfOnesList[bitLength - 1 - i] > lines.length / 2){
+    for (let i = 0; i < bitLength; i++) {
+        if (sumOfOnesList[bitLength - 1 - i] > lines.length / 2) {
             // The most common (gamma) is "1", so epsilon is "0"
             gamma += 2 ** i;
         } else {
@@ -21,32 +21,26 @@ export function dayThree() {
             epsilon += 2 ** i;
         }
     }
-    console.log(`power=${gamma*epsilon}`);
+    console.log(`power=${gamma * epsilon}`);
 
     // Part 2
     let remainingOxygen = lines.slice()
-    let remainingCo2 = lines.slice()
-    let foundOxygen: string | undefined;
-    let foundCo2: string | undefined;
+    let remainingCarbonDioxide = lines.slice()
     for (let i = 0; i < bitLength; i++) {
-        let sumOfOxygenOnes = 0;
-        let sumOfCarbonDioxideOnes = 0;
-        for (const value of remainingOxygen){
-            if (value[i] === "1") sumOfOxygenOnes++;
+        const oxygenSorted: Array<string[]> = [[], []];
+        const carbonDioxideSorted: Array<string[]> = [[], []];
+        if (remainingOxygen.length > 1) {
+            for (const value of remainingOxygen) {
+                oxygenSorted[Number(value[i])].push(value);
+            }
+            remainingOxygen = oxygenSorted[0].length > oxygenSorted[1].length ? oxygenSorted[0] : oxygenSorted[1];
         }
-        for (const value of remainingCo2){
-            if (value[i] === "1") sumOfCarbonDioxideOnes++;
-        }
-        const mostCommonValue = sumOfOxygenOnes > remainingOxygen.length / 2 ? "1" : "0"
-        const leastCommonValue = sumOfCarbonDioxideOnes > remainingOxygen.length / 2 ? "0" : "1"
-        remainingOxygen = remainingOxygen.filter(value => value[i] === mostCommonValue);
-        remainingCo2 = remainingCo2.filter(value => value[i] === leastCommonValue);
-        if (remainingOxygen.length === 1){
-            foundOxygen = remainingOxygen[0];
-        }
-        if (remainingCo2.length === 1){
-            foundCo2 = remainingCo2[0];
+        if (remainingCarbonDioxide.length > 1) {
+            for (const value of remainingCarbonDioxide) {
+                carbonDioxideSorted[Number(value[i])].push(value);
+            }
+            remainingCarbonDioxide = carbonDioxideSorted[0].length > carbonDioxideSorted[1].length ? carbonDioxideSorted[1] : carbonDioxideSorted[0];
         }
     }
-    console.log(foundOxygen, foundCo2,'oxigen*co2=', parseInt(foundOxygen!,2) * parseInt(foundCo2!, 2));
+    console.log(remainingOxygen[0], remainingCarbonDioxide[0], 'oxigen*co2=', parseInt(remainingOxygen[0], 2) * parseInt(remainingCarbonDioxide[0], 2));
 }
