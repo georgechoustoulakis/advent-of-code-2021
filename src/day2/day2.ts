@@ -1,14 +1,14 @@
-import { readFromFileByLine } from "../utils";
+import {readFromFileByLine} from "../utils";
 import path from "path";
 
 export function dayTwo() {
     const lines = readFromFileByLine(path.resolve(__dirname, './input.txt'));
     let horizontal = 0;
     let depth = 0;
-    for (const line of lines){
+    for (const line of lines) {
         const split = line.split(' ');
         const value = Number(split[1]);
-        switch (split[0]){
+        switch (split[0]) {
             case "forward":
                 horizontal += value;
                 break;
@@ -20,15 +20,15 @@ export function dayTwo() {
                 break;
         }
     }
-    console.log(`x=${horizontal} d=${depth} multiplied=${horizontal*depth}`)
+    console.log(`x=${horizontal} d=${depth} multiplied=${horizontal * depth}`)
     // Part2
     let horizontal2 = 0;
     let depth2 = 0;
     let aim = 0;
-    for (const line of lines){
+    for (const line of lines) {
         const split = line.split(' ');
         const value = Number(split[1]);
-        switch (split[0]){
+        switch (split[0]) {
             case "forward":
                 horizontal2 += value;
                 depth2 += aim * value;
@@ -41,5 +41,5 @@ export function dayTwo() {
                 break;
         }
     }
-    console.log(`x=${horizontal2} d=${depth2} multiplied=${horizontal2*depth2}`)
+    console.log(`x=${horizontal2} d=${depth2} multiplied=${horizontal2 * depth2}`)
 }
