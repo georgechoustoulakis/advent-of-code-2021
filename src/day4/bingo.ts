@@ -4,6 +4,7 @@ import path from "path";
 interface BingoBoard {
     grid: Array<MarkedNumber[]>
     marks: number;
+    hasWon: boolean;
 }
 
 interface MarkedNumber {
@@ -16,13 +17,14 @@ export function playBingo() {
     const bingoInput = lines[0].split(",").map(text => Number(text));
     const bingoBoards = parseBoards(lines.slice(1));
 
-    partOne(bingoInput, bingoBoards);
+    // partOne(bingoInput, bingoBoards);
+    partTwo(bingoInput, bingoBoards);
 }
 
 function parseBoards(lines: string[]): BingoBoard[] {
     const boards: BingoBoard[] = [];
     for (let i = 0; i < lines.length; i += 6) {
-        const board: BingoBoard = {grid: [], marks: 0};
+        const board: BingoBoard = {grid: [], marks: 0, hasWon: false};
         for (let j = 0; j < 5; j++) {
             const line = lines[i + j + 1];
             const split = line.replace(/\s\s+/g, " ").trim().split(" ");
@@ -40,6 +42,25 @@ function partOne(bingoInput: number[], bingoBoards: BingoBoard[]) {
             if (applyBingoMarkAndCheckVictory(draw, board)) {
                 return console.log('draw', draw, 'score', sumOfUnmarkedNumbers(board) * draw);
             }
+        }
+    }
+}
+
+function partTwo(bingoInput: number[], bingoBoards: BingoBoard[]) {
+    const remainingBoards = bingoBoards.slice();
+    for (const draw of bingoInput) {
+        const boardsToRemove: BingoBoard[] = []
+        for (const board of remainingBoards) {
+            if (applyBingoMarkAndCheckVictory(draw, board)) {
+                boardsToRemove.push(board);
+            }
+        }
+        for (const board of boardsToRemove){
+            remainingBoards.splice(remainingBoards.indexOf(board),1)
+        }
+        if (remainingBoards.length === 0) {
+            // found the last winning board
+            return console.log('draw', draw, 'score', sumOfUnmarkedNumbers(boardsToRemove[0]) * draw);
         }
     }
 }
@@ -62,7 +83,11 @@ function applyBingoMarkAndCheckVictory(draw: number, board: BingoBoard): boolean
 }
 
 function checkVictory(row: number, column: number, board: BingoBoard): boolean {
-    return checkRows(row, board) || checkColumns(column, board);
+    if (checkRows(row, board) || checkColumns(column, board)){
+        board.hasWon = true;
+        return true;
+    }
+    return false;
 }
 
 function checkRows(row: number, board: BingoBoard): boolean {
