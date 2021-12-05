@@ -51,6 +51,16 @@ function drawLinesOnGrid(grid: Array<Array<number>>, lines: Line[]): void {
             for (let i = line.start.x; countUp ? i < line.end.x + 1 : i > line.end.x - 1; countUp ? i++ : i--) {
                 grid[i][line.start.y] += 1;
             }
+        } else {
+            const countUpX = line.start.x < line.end.x;
+            const countUpY = line.start.y < line.end.y;
+            const length = Math.abs(line.start.x - line.end.x);
+            const currentPosition: Coordinate = {x: line.start.x, y: line.start.y};
+            for (let i = 0; i < length + 1; i++) {
+                grid[currentPosition.x][currentPosition.y] += 1;
+                countUpX ? currentPosition.x++ : currentPosition.x--;
+                countUpY ? currentPosition.y++ : currentPosition.y--;
+            }
         }
     }
 }
