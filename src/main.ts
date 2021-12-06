@@ -11,3 +11,4 @@ dayThree();
 playBingo();
 drawLines();
 multiplyFish();
+multiplyFishPart2()
