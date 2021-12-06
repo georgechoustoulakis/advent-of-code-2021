@@ -17,7 +17,7 @@ export function drawLines() {
     const parsedLines = parseLines(lines)
 
     const gridSize = 1000;
-    const grid: Array<Array<number>> = Array(gridSize).fill(0).map(_ => Array(gridSize).fill(0));
+    const grid: number[][] = Array(gridSize).fill(0).map(_ => Array(gridSize).fill(0));
     drawLinesOnGrid(grid, parsedLines);
 
     const count = howManyBiggerThanOne(grid);
@@ -38,7 +38,7 @@ function parseLines(lines: string[]): Line[] {
     return parsedLines;
 }
 
-function drawLinesOnGrid(grid: Array<Array<number>>, lines: Line[]): void {
+function drawLinesOnGrid(grid: number[][], lines: Line[]): void {
     // Only consider lines where x1 === x2 or y1 === y2
     for (const line of lines) {
         if (line.start.x === line.end.x) {
@@ -65,7 +65,7 @@ function drawLinesOnGrid(grid: Array<Array<number>>, lines: Line[]): void {
     }
 }
 
-function howManyBiggerThanOne(grid: Array<Array<number>>): number {
+function howManyBiggerThanOne(grid: number[][]): number {
     const gridSize = grid.length;
     let count = 0;
     for (let x = 0; x < gridSize; x++) {
