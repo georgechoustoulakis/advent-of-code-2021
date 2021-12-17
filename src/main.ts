@@ -6,6 +6,7 @@ import {drawLines} from "./day5/vents";
 import {multiplyFish, multiplyFishPart2} from "./day6/lanternfish";
 import {calculateCrabPosition} from "./day7/day7";
 import {sevenSegmentThing} from "./day8/display";
+import {findLowPoints} from "./day9/lowPoints";
 
 dayOne();
 dayTwo();
@@ -16,3 +17,4 @@ multiplyFish();
 multiplyFishPart2()
 calculateCrabPosition();
 sevenSegmentThing();
+findLowPoints();
